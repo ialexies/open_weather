@@ -27,13 +27,12 @@ class WeatherApiServices {
     );
     try {
       final http.Response response = await httpClient.get(uri);
-      if (response != 200) {
+      if (response.statusCode != 200) {
         throw httpErrorHandler(response);
       }
 
       final ResponseBody = json.decode(response.body);
 
-      
       // if some value are empty make an exception
       if (ResponseBody.isEmpty) {
         throw WeatherException('Cannot get the location of $city');
@@ -58,20 +57,19 @@ class WeatherApiServices {
         'appid': dotenv.env['APPID'],
       },
     );
-        try {
+    try {
       final http.Response response = await httpClient.get(uri);
 
-      if (response != 200) {
-      throw httpErrorHandler(response);
-      }  
+      if (response.statusCode != 200) {
+        throw httpErrorHandler(response);
+      }
 
-      final weatherJson = json.decode(response.body);
+      final weatherJson = jsonDecode(response.body);
 
-      final Weather weather = weatherJson.fromJson(weatherJson);
+      final Weather weather = Weather.fromJson(weatherJson);
       return weather;
     } catch (e) {
       rethrow;
     }
-  }
   }
 }
