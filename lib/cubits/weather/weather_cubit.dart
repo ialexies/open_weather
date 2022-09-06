@@ -31,6 +31,7 @@ class WeatherCubit extends Cubit<WeatherState> {
           error: e,
         ),
       );
+        print('state: $state');
     }
   }
 }

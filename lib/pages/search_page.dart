@@ -8,6 +8,21 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final _formKey = GlobalKey<FormState>();
+  String? _city;
+  AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
+
+  void _submit() {
+    setState(() {
+      autoValidateMode = AutovalidateMode.always;
+    });
+    final form = _formKey.currentState;
+    if (form != null && form.validate()) {
+      form.save();
+      Navigator.pop(context, _city!.trim());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +30,41 @@ class _SearchPageState extends State<SearchPage> {
         title: Text('Search'),
       ),
       body: Center(
-        child: Text('Search'),
+        child: Form(
+          key: _formKey,
+          autovalidateMode: autoValidateMode,
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 60),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  autofocus: true,
+                  style: const TextStyle(fontSize: 18),
+                  decoration: const InputDecoration(
+                    labelText: 'City Name',
+                    hintText: 'More than 2 characters',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (String? input) {
+                    if (input == null || input.trim().length < 2) {
+                      return 'City name must be at least 2 character long';
+                    }
+                    return null;
+                  },
+                  onSaved: (String? input) {
+                    _city = input;
+                  },
+                ),
+              ),
+              ElevatedButton(
+                onPressed: _submit,
+                child: Text("How's Weather"),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
