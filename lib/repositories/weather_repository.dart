@@ -14,14 +14,13 @@ class WeatherRerpository {
     try {
       final DirectGeocoding directGeocoding =
           await weatherApiServices.getDirectGeoCoding(city);
-      print('directGeoCoding: $directGeocoding');
 
       final Weather tempWeather =
           await weatherApiServices.getWeather(directGeocoding);
-      print('tempWeather: $tempWeather');
 
       final Weather weather = tempWeather.copyWith(
           name: directGeocoding.name, country: directGeocoding.country);
+
       return weather;
     } on WeatherException catch (e) {
       throw CustomError(errMsg: e.message);
