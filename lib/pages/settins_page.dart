@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_weather_cubit/cubits/temp_settings/temp_settings_cubit.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -14,8 +16,19 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text('Settings'),
       ),
-      body: Center(
-        child: Text('Settings'),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: ListTile(
+          title: const Text('Temperature'),
+          subtitle: const Text('Celsius/Farenheigt (Default:Celsius)'),
+          trailing: Switch(
+            value: context.watch<TempSettingsCubit>().state.tempUnit ==
+                TempUnit.celsius,
+            onChanged: (_) {
+              context.read<TempSettingsCubit>().toggleTempUnit();
+            },
+          ),
+        ),
       ),
     );
   }
